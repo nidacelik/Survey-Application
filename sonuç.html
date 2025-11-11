@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eğitim Öncesi Anket</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f0f8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    .container-content {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 600px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar (Menü Çubuğu) -->
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark w-100">
+    <div class="container">
+      <a class="navbar-brand" href="#">Programlama Eğitimi Anketleri</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Eğitim Öncesi Anket</a></li>
+          <li class="nav-item"><a class="nav-link" href="sonrasi.html">Eğitim Sonrası Anket</a></li>
+          <li class="nav-item"><a class="nav-link" href="dashboard/index.html">Kontrol Paneli</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-content text-center">
+    <h3 class="mb-4 text-primary">🧠 Eğitim Öncesi Programlama Anketi</h3>
+    <form id="onSurvey">
+      <div id="questions"></div>
+      <button type="submit" class="btn btn-primary mt-3">Anketi Kaydet</button>
+    </form>
+  </div>
+
+  <script>
+    const sorular = [
+      "Bilgisayar nedir biliyor musun?",
+      "Bir program ne işe yarar biliyor musun?",
+      "Hiç kodlama yaptın mı?",
+      "Programlama eğlenceli midir?",
+      "Bir robotu nasıl yöneteceğini biliyor musun?",
+      "Programlama öğrenmek ister misin?",
+      "Bilgisayarda hata gördüğünde ne yapacağını bilir misin?",
+      "Oyunlar nasıl yapılır biliyor musun?",
+      "Kod yazarken dikkatli olmanın önemli olduğunu biliyor musun?",
+      "Programlamayı öğrenmek seni mutlu eder mi?"
+    ];
+
+    const container = document.getElementById("questions");
+    sorular.forEach((soru, i) => {
+      container.innerHTML += `
+        <div class="mb-3 text-start">
+          <label class="form-label">${i + 1}. ${soru}</label><br>
+          <input type="radio" name="q${i}" value="Evet" required> Evet
+          <input type="radio" name="q${i}" value="Hayır"> Hayır
+        </div>`;
+    });
+
+    document.getElementById("onSurvey").addEventListener("submit", e => {
+      e.preventDefault();
+      const cevaplar = sorular.map((_, i) =>
+        document.querySelector(`input[name='q${i}']:checked`).value
+      );
+      localStorage.setItem("anket_oncesi", JSON.stringify(cevaplar));
+      alert("Eğitim öncesi anketiniz kaydedildi!");
+      window.location.href = "sonrasi.html";
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

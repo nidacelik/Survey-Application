@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eğitim Öncesi Anket</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* Navbar'ın altında kalan içeriği kaydırmak ve sayfayı tam kaplamak için */
+        body {
+            padding-top: 56px;
+            /* Sabit navbar yüksekliği kadar boşluk */
+            background: linear-gradient(to bottom right, #007bff, #ffffff);
+            min-height: 100vh;
+            /* Tam sayfa yüksekliği */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Yatayda ortalar */
+        }
+
+        .container-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            /* İçeriği dikeyde ortalamak için auto margin */
+            margin-top: auto;
+            margin-bottom: auto;
+            flex-grow: 1;
+            /* Esnek alanda yer kaplamasını sağlar */
+        }
+
+        /* Soruların yan yana daha iyi görünmesi için */
+        fieldset {
+            /* border rengini hafifletmek isterseniz */
+            border-color: #dee2e6 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-sm navbar-dark w-100 fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Programlama Eğitimi Anketleri</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link fs-5 active" aria-current="page" href="index.html">Eğitim
+                            Öncesi Anket</a></li>
+                    <li class="nav-item"><a class="nav-link fs-5 active" href="sonrasi.html">Eğitim Sonrası Anket</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link fs-5 active" href="dashboard/index.html">Kontrol Paneli</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-content text-center">
+        <h3 class="mb-4 text-primary">🧠 Eğitim Sonrası Programlama Anketi</h3>
+        <form id="onSurvey">
+            <div id="questions"></div>
+            <button type="submit" class="btn btn-primary mt-3">Anketi Kaydet</button>
+        </form>
+    </div>
+
+    <script>
+        const sorular = [
+                "Artık programlamanın ne olduğunu biliyor musun ?",
+
+                "Kod yazarken eğlendin mi ?",
+
+                "Kod yazmak sence kolay mı, zor mu ?",
+
+                "Kendi küçük oyununu veya hikayeni yapmayı başardın mı ?",
+
+                "Bilgisayarda sadece oynamak değil, üretmek de eğlenceli miymiş ?",
+
+                "Kod yazarken hata yaptığında ne yapıyorsun ?",
+
+                "Kodlama yaparken arkadaşlarınla iş birliği yaptın mı ?",
+
+                "Programlama öğrenmeye devam etmek ister misin ?",
+
+                "Kodlama öğrendikten sonra kendine güvenin arttı mı ?",
+
+                "En çok hangi etkinlik veya proje hoşuna gitti ?"
+        ];
+
+        const container = document.getElementById("questions");
+        container.innerHTML = ''; // Önceki içeriği temizle
+
+        sorular.forEach((soru, i) => {
+            // Soru ve Cevapları yan yana hizalamak için Flexbox (d-flex) kullanıldı
+            container.innerHTML += `
+                <fieldset class="mb-4 text-start border p-3 rounded">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <legend class="fs-6 fw-bold mb-0 me-3">${i + 1}. ${soru}</legend>
+                        
+                        <div class="d-flex flex-shrink-0"> 
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="q${i}" id="q${i}-evet" value="Evet" required>
+                                <label class="form-check-label fw-bold text-success" for="q${i}-evet">Evet</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="q${i}" id="q${i}-hayir" value="Hayır">
+                                <label class="form-check-label fw-bold text-danger" for="q${i}-hayir">Hayır</label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>`;
+        });
+
+        document.getElementById("onSurvey").addEventListener("submit", e => {
+            e.preventDefault();
+
+            // Tüm soruların cevaplandığını kontrol et
+            const tumCevaplar = sorular.map((_, i) =>
+                document.querySelector(`input[name='q${i}']:checked`)
+            );
+
+            if (tumCevaplar.some(cevap => !cevap)) {
+                alert("Lütfen tüm soruları cevaplayınız.");
+                return;
+            }
+
+            const cevaplar = tumCevaplar.map(cevap => cevap.value);
+
+            // Veriyi localStorage'a kaydet
+            localStorage.setItem("anket_sonrasi", JSON.stringify(cevaplar));
+
+            alert("Eğitim sonrası anketiniz kaydedildi!");
+
+            // Kullanıcıyı bir sonraki sayfaya yönlendir
+            window.location.href = "sonrasi.html";
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
